@@ -1,0 +1,1 @@
+Insert into PRODUCT (PRICE,PRODUCT_NAME,AUTHOR,GENRE,PUBLICATIONS) values(20,'Book1','Ravi','H','HI');
