@@ -3,6 +3,8 @@ package com.example.shoppingcart.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class CartService {
 	@Autowired
 	ProductRepository productRepo;
 	
-	public Cart addProductTocart(Cart cart)
+	public Cart addProductToCart(Cart cart)
 	{
 		List<Product> product = new ArrayList<>();
 		for(int i = 0;i<cart.getProduct().size();i++)
@@ -43,9 +45,52 @@ public class CartService {
 		
 	}
 	
-	public void viewProductInCart(int id)
+	public Cart viewProductInCart(int id)
 	{
+		Optional<Cart> cart = cartRepository.findById(id);
+		if(cart.isPresent())
+		{
+			return cart.get();
+			
+		}
+		
+		return null;
 		
 	}
 
+	public Cart removeProductFromCart(int cartId,int ProductId)
+	{
+		Optional<Cart> optionalcart = cartRepository.findById(cartId);
+		List<Product> productList = null;
+		if(optionalcart.isPresent())
+		{
+			productList = optionalcart.get().getProduct();
+			productList = productList.stream().
+			filter(
+					product -> product.getProductId()!= ProductId)
+			.collect(Collectors.toList());
+			
+		}
+		Cart cart =  optionalcart.get();
+		cart.setProduct(productList);
+		
+		cartRepository.save(cart);
+		return cart;
+	}
+
+	public Cart removeAllProductFromCart(int cartId ) {
+		// TODO Auto-generated method stub
+		Optional<Cart> optionalcart = cartRepository.findById(cartId);
+		List<Product> productList = null;
+		if(optionalcart.isPresent())
+		{
+			productList = optionalcart.get().getProduct();
+			productList.clear();
+		}
+		Cart cart =  optionalcart.get();
+		cart.setProduct(productList);
+		
+		cartRepository.save(cart);
+		return cart;
+	}
 }

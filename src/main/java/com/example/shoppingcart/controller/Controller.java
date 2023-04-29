@@ -38,7 +38,7 @@ public class Controller {
 	public Cart addproductToCart(@RequestBody Cart cart )
 	{
 		
-		return cartService.addProductTocart(cart);
+		return cartService.addProductToCart(cart);
 		
 		
 	}
@@ -97,16 +97,18 @@ public class Controller {
 
 	
 	
-	@DeleteMapping("/cart/remove/{product_id}")
-	public String removeProductFromCart(@PathVariable int product_id)
+	@DeleteMapping("/cart/remove")
+	public Cart removeProductFromCart(
+			@RequestParam(required = true) int cartId,
+			@RequestParam(required = true) int ProductId)
 	{
-		return "remove product From Cart is working fine" + product_id;
+		return cartService.removeProductFromCart(cartId, ProductId);
 	}
 	
 	@DeleteMapping("/cart/remove/all")
-	public String removeAllProductFromCart()
+	public Cart removeAllProductFromCart(@RequestParam(required = true) int cartId)
 	{
-		return "remove All Product From Cart is working fine";
+		return cartService.removeAllProductFromCart(cartId);
 		
 	}
 	
@@ -118,9 +120,9 @@ public class Controller {
 	}
 	
 	@GetMapping("/cart/view")
-	public String viewCart()
+	public Cart viewCart(@RequestParam Integer id)
 	{
-		return  "HI";
+		return cartService.viewProductInCart(id);
 	}
 	
 	
